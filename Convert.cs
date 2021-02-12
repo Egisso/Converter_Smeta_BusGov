@@ -90,8 +90,6 @@ namespace Converter_Smeta_BusGov
             XmlSerializer serializer = new XmlSerializer(typeof(annualBalanceF0503721_2015));
             FileStream fs = new FileStream(nameXmlFile, FileMode.Create);
             serializer.Serialize(fs, f721);
-
-
         }
     }
 }
