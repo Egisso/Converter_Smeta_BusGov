@@ -21,7 +21,6 @@ namespace Converter_Smeta_BusGov
                 toolStripStatusLabel2.Text = "Идет конвертация...";
                 folderBrowserDialog1.ShowDialog();
                 string path = folderBrowserDialog1.SelectedPath;
-                //stopWatch.Start();
 
                 File.WriteAllText(path + @"//External.xsd", Resource1.External);
                 File.WriteAllText(path + @"//balance.xsd", Resource1.balance);
@@ -32,20 +31,15 @@ namespace Converter_Smeta_BusGov
                 string[] files = Directory.GetFiles(path, "*.txt");
                 toolStripProgressBar1.Minimum = toolStripProgressBar1.Value = 0;
                 toolStripProgressBar1.Maximum = files.Length;
-                string textResult;
                 foreach(string file in files)
                 {
                     string[] lines = File.ReadAllLines(file, Encoding.GetEncoding(1251));
                     string nameXmlFile = file.Replace(".txt", ".xml");
-                    textBox1.Text += (Convert.Converter(lines, nameXmlFile, fileShema) + Environment.NewLine);
+                    listBox1.Items.Add(Convert.Converter(lines, nameXmlFile, fileShema));
                     toolStripProgressBar1.PerformStep();
                 }
                 toolStripStatusLabel2.Text = "Конвертация выполнена!";
                 button1.Enabled = false;
-                //stopWatch.Stop();
-                //TimeSpan ts = stopWatch.Elapsed;
-                //label3.Text = $"Обработано файлов {files.Length} за {ts.TotalSeconds} секунд.";
-                //label3.Visible = true;
 
                 File.Delete(path + @"//External.xsd");
                 File.Delete(path + @"//balance.xsd");
