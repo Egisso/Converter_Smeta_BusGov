@@ -17,28 +17,40 @@ namespace Converter_Smeta_BusGov
         {
             try
             {
-                Stopwatch stopWatch = new Stopwatch();
+                //Stopwatch stopWatch = new Stopwatch();
                 toolStripStatusLabel2.Text = "Идет конвертация...";
                 folderBrowserDialog1.ShowDialog();
                 string path = folderBrowserDialog1.SelectedPath;
-                stopWatch.Start();
+                //stopWatch.Start();
+
+                File.WriteAllText(path + @"//External.xsd", Resource1.External);
+                File.WriteAllText(path + @"//balance.xsd", Resource1.balance);
+                File.WriteAllText(path + @"//financialActivityPlan.xsd", Resource1.financialActivityPlan);
+                File.WriteAllText(path + @"//Types.xsd", Resource1.Types);
+                string fileShema = path + @"//External.xsd";
+
                 string[] files = Directory.GetFiles(path, "*.txt");
                 toolStripProgressBar1.Minimum = toolStripProgressBar1.Value = 0;
                 toolStripProgressBar1.Maximum = files.Length;
-
+                string textResult;
                 foreach(string file in files)
                 {
                     string[] lines = File.ReadAllLines(file, Encoding.GetEncoding(1251));
                     string nameXmlFile = file.Replace(".txt", ".xml");
-                    Convert.Converter(lines, nameXmlFile);
+                    textBox1.Text += (Convert.Converter(lines, nameXmlFile, fileShema) + Environment.NewLine);
                     toolStripProgressBar1.PerformStep();
                 }
                 toolStripStatusLabel2.Text = "Конвертация выполнена!";
                 button1.Enabled = false;
-                stopWatch.Stop();
-                TimeSpan ts = stopWatch.Elapsed;
-                label3.Text = $"Обработано файлов {files.Length} за {ts.TotalSeconds} секунд.";
-                label3.Visible = true;
+                //stopWatch.Stop();
+                //TimeSpan ts = stopWatch.Elapsed;
+                //label3.Text = $"Обработано файлов {files.Length} за {ts.TotalSeconds} секунд.";
+                //label3.Visible = true;
+
+                File.Delete(path + @"//External.xsd");
+                File.Delete(path + @"//balance.xsd");
+                File.Delete(path + @"//financialActivityPlan.xsd");
+                File.Delete(path + @"//Types.xsd");
             }
             catch { MessageBox.Show("Ошибка конвертации!", "Ошибка"); }
         }

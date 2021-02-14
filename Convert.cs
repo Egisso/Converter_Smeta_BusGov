@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace Converter_Smeta_BusGov
 {
     class Convert
     {
-        public static void Converter(string[] lines, string nameXmlFile)
+        public static string Converter(string[] lines, string nameXmlFile, string fileShema)
         {
             List<reportItemF0503721TopLevelType2015> smetaIncome = new List<reportItemF0503721TopLevelType2015>();
             List<reportItemF0503721TopLevelType2015> smetaExpense = new List<reportItemF0503721TopLevelType2015>();
@@ -35,10 +38,10 @@ namespace Converter_Smeta_BusGov
                         totalSpecified = true,
                     };
 
-                    if (kodStr >= 0 && kodStr < 150) smetaIncome.Add(item);
+                    if (kodStr < 150) smetaIncome.Add(item);
                     if (kodStr >= 150 && kodStr < 310) smetaExpense.Add(item);
                     if (kodStr >= 310 && kodStr < 400) smetaNonFinancialAssets.Add(item);
-                    if (kodStr >= 310 && kodStr < 400) smetaFinancialAssets.Add(item);
+                    if (kodStr >= 400) smetaFinancialAssets.Add(item);
                 }
             }
             var emptyItem = new reportItemF0503721TopLevelType2015()
@@ -90,6 +93,19 @@ namespace Converter_Smeta_BusGov
             XmlSerializer serializer = new XmlSerializer(typeof(annualBalanceF0503721_2015));
             FileStream fs = new FileStream(nameXmlFile, FileMode.Create);
             serializer.Serialize(fs, f721);
+            fs.Close();
+
+            //Валидация
+            XmlSchemaSet schemas = new XmlSchemaSet();
+            schemas.Add(null, fileShema);
+            XDocument document = XDocument.Load(nameXmlFile);
+            string message = $"Файл {nameXmlFile} обработан без ошибок.";
+            document.Validate(schemas, (sender, validationEventArgs) =>
+            {
+                //сообщение об ошибке валидации, если ошибок нет сообщение пустое
+                message = $"Файл {nameXmlFile} обработан содержит ошибку: {validationEventArgs.Message}";
+            });
+            return message;
         }
     }
 }
