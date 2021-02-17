@@ -20,7 +20,7 @@ namespace Converter_Smeta_BusGov
 
             foreach (string line in lines)
             {
-                string[] lineArr = line.Split('|');
+                string[] lineArr = line.Replace(".", ",").Split('|');
                 if (lineArr.Length == 7 && Int32.TryParse(lineArr[0], out int kodStr)) 
                 {
                     reportItemF0503721TopLevelType2015 item = new reportItemF0503721TopLevelType2015()
