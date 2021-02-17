@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="balance_External_financialActivityPlan_FK_NSI_Types.cs" />
     <Compile Include="Convert.cs" />
+    <Compile Include="ReciveNameKosgu.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

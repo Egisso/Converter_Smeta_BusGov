@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>Конвертер 721 формы предназначен для конвертирования отчета из формата txt, сформированного в программе АС Смета, в формат xml для загрузки отчеа на официальном сайте для размещения информации о государственных (муниципальных) учреждениях.</value>
+    <value>Конвертер 721 и 730 форм предназначен для конвертирования отчета из формата txt, сформированного в программе АС Смета или Свод-Смарт, в формат xml для загрузки отчета на официальном сайте для размещения информации о государственных (муниципальных) учреждениях.</value>
   </data>
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

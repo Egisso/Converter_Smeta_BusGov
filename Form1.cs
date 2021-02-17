@@ -17,7 +17,6 @@ namespace Converter_Smeta_BusGov
         {
             try
             {
-                //Stopwatch stopWatch = new Stopwatch();
                 toolStripStatusLabel2.Text = "Идет конвертация...";
                 folderBrowserDialog1.ShowDialog();
                 string path = folderBrowserDialog1.SelectedPath;

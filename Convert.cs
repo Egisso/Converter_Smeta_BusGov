@@ -13,19 +13,21 @@ namespace Converter_Smeta_BusGov
     {
         public static string Converter(string[] lines, string nameXmlFile, string fileShema)
         {
+
             List<reportItemF0503721TopLevelType2015> smetaIncome = new List<reportItemF0503721TopLevelType2015>();
             List<reportItemF0503721TopLevelType2015> smetaExpense = new List<reportItemF0503721TopLevelType2015>();
             List<reportItemF0503721TopLevelType2015> smetaNonFinancialAssets = new List<reportItemF0503721TopLevelType2015>();
             List<reportItemF0503721TopLevelType2015> smetaFinancialAssets = new List<reportItemF0503721TopLevelType2015>();
 
-            foreach (string line in lines)
+            for(int i = 0; i < lines.Length; i++)
             {
-                string[] lineArr = line.Replace(".", ",").Split('|');
+                string[] lineArr = lines[i].Replace(".", ",").Split('|');
                 if (lineArr.Length == 7 && Int32.TryParse(lineArr[0], out int kodStr)) 
                 {
+                    //нужно проверить начало след строки, если да сделать сабайтем и добавить в сабайтем[]
                     reportItemF0503721TopLevelType2015 item = new reportItemF0503721TopLevelType2015()
                     {
-                        name = lineArr[0],
+                        name = ReciveNameKosgu.FromNumber(lineArr[1]),
                         lineCode = lineArr[0],
                         analyticCode = lineArr[1].Contains("***") ? "X" : lineArr[1],
                         targetFunds = Decimal.Parse(lineArr[2]),
@@ -37,6 +39,7 @@ namespace Converter_Smeta_BusGov
                         total = Decimal.Parse(lineArr[5]),
                         totalSpecified = true,
                     };
+                    // если сабайтем[].Lenght > 0, item.reportSubItem = сабайтем[]
 
                     if (kodStr < 150) smetaIncome.Add(item);
                     if (kodStr >= 150 && kodStr < 310) smetaExpense.Add(item);
