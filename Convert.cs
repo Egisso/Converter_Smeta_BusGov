@@ -18,34 +18,59 @@ namespace Converter_Smeta_BusGov
             List<reportItemF0503721TopLevelType2015> smetaExpense = new List<reportItemF0503721TopLevelType2015>();
             List<reportItemF0503721TopLevelType2015> smetaNonFinancialAssets = new List<reportItemF0503721TopLevelType2015>();
             List<reportItemF0503721TopLevelType2015> smetaFinancialAssets = new List<reportItemF0503721TopLevelType2015>();
-
-            for(int i = 0; i < lines.Length; i++)
+            int i = 0;
+            while (i < lines.Length)
             {
-                string[] lineArr = lines[i].Replace(".", ",").Split('|');
-                if (lineArr.Length == 7 && Int32.TryParse(lineArr[0], out int kodStr)) 
+                string[] arrayData = lines[i].Replace(".", ",").Split('|');
+                if (arrayData.Length == 7 && Int32.TryParse(arrayData[0], out int kodStr)) 
                 {
-                    //нужно проверить начало след строки, если да сделать сабайтем и добавить в сабайтем[]
                     reportItemF0503721TopLevelType2015 item = new reportItemF0503721TopLevelType2015()
                     {
-                        name = ReciveNameKosgu.FromNumber(lineArr[1]),
-                        lineCode = lineArr[0],
-                        analyticCode = lineArr[1].Contains("***") ? "X" : lineArr[1],
-                        targetFunds = Decimal.Parse(lineArr[2]),
+                        name = ReciveNameKosgu.FromNumber(arrayData[1]),
+                        lineCode = arrayData[0],
+                        analyticCode = arrayData[1].Contains("***") ? "X" : arrayData[1],
+                        targetFunds = Decimal.Parse(arrayData[2]),
                         targetFundsSpecified = true,
-                        stateTaskFunds = Decimal.Parse(lineArr[3]),
+                        stateTaskFunds = Decimal.Parse(arrayData[3]),
                         stateTaskFundsSpecified = true,
-                        revenueFunds = Decimal.Parse(lineArr[4]),
+                        revenueFunds = Decimal.Parse(arrayData[4]),
                         revenueFundsSpecified = true,
-                        total = Decimal.Parse(lineArr[5]),
+                        total = Decimal.Parse(arrayData[5]),
                         totalSpecified = true,
                     };
-                    // если сабайтем[].Lenght > 0, item.reportSubItem = сабайтем[]
+                    // item have subitem?
+                    //нужно проверить начало след строки, если да сделать сабайтем и добавить в сабайтем[]
+                    List<reportItemF0503721BaseType2015> reportSubitem = new List<reportItemF0503721BaseType2015>();
+                    while (lines[i + 1].StartsWith(arrayData[0]))
+                    {
+                        i++;
+                        string[] arrayDataSubitem = lines[i].Replace(".", ",").Split('|');
+                        reportItemF0503721BaseType2015 subItem = new reportItemF0503721BaseType2015() 
+                        {
+                            name = ReciveNameKosgu.FromNumber(arrayDataSubitem[1]),
+                            lineCode = arrayDataSubitem[0],
+                            analyticCode = arrayDataSubitem[1].Contains("***") ? "X" : arrayDataSubitem[1],
+                            targetFunds = Decimal.Parse(arrayDataSubitem[2]),
+                            targetFundsSpecified = true,
+                            stateTaskFunds = Decimal.Parse(arrayDataSubitem[3]),
+                            stateTaskFundsSpecified = true,
+                            revenueFunds = Decimal.Parse(arrayDataSubitem[4]),
+                            revenueFundsSpecified = true,
+                            total = Decimal.Parse(arrayDataSubitem[5]),
+                            manually = true,
+                            totalSpecified = true,
+                        };
+                        reportSubitem.Add(subItem);
+                    }
+
+                    if (reportSubitem.Count > 0) item.reportSubItem = reportSubitem.ToArray();
 
                     if (kodStr < 150) smetaIncome.Add(item);
                     if (kodStr >= 150 && kodStr < 310) smetaExpense.Add(item);
                     if (kodStr >= 310 && kodStr < 400) smetaNonFinancialAssets.Add(item);
                     if (kodStr >= 400) smetaFinancialAssets.Add(item);
                 }
+                i++;
             }
             var emptyItem = new reportItemF0503721TopLevelType2015()
             {
