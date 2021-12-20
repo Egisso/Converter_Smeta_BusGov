@@ -38,8 +38,6 @@ namespace Converter_Smeta_BusGov
                         total = Decimal.Parse(arrayData[5]),
                         totalSpecified = true,
                     };
-                    // item have subitem?
-                    //нужно проверить начало след строки, если да сделать сабайтем и добавить в сабайтем[]
                     List<reportItemF0503721BaseType2015> reportSubitem = new List<reportItemF0503721BaseType2015>();
                     while (lines[i + 1].StartsWith(arrayData[0]))
                     {
