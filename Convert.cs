@@ -18,6 +18,7 @@ namespace Converter_Smeta_BusGov
             List<reportItemF0503721TopLevelType2015> smetaExpense = new List<reportItemF0503721TopLevelType2015>();
             List<reportItemF0503721TopLevelType2015> smetaNonFinancialAssets = new List<reportItemF0503721TopLevelType2015>();
             List<reportItemF0503721TopLevelType2015> smetaFinancialAssets = new List<reportItemF0503721TopLevelType2015>();
+    
             int i = 0;
             while (i < lines.Length)
             {
